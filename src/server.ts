@@ -1,9 +1,20 @@
 import Fastify from "fastify";
+import { PrismaClient } from "@prisma/client"
 
 const app = Fastify();
+const prisma = new PrismaClient();
 
-app.get("/", () => {
-    return "Hello World"
+app.get("/", async () => {
+    const habits = await prisma.habit.findMany({
+        where: {
+             title: { 
+                startsWith: 'Correr'
+             }
+        }
+    })
+
+    return habits
+
 })
 
 app.listen({
@@ -11,4 +22,3 @@ app.listen({
 }).then(() => {
     console.log("Ta rodando essa bagaça")
 })
-
